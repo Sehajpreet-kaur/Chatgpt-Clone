@@ -33,7 +33,7 @@ function App() {
     }
 
     try{
-      const response=await fetch('http://localhost:8000/completions',options)
+      const response=await fetch(`${process.env.REACT_APP_API_URL}/completions`,options)
       const data=await response.json()
       console.log(data)
       setMessage(data.choices[0].message)
