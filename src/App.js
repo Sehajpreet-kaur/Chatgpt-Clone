@@ -35,7 +35,11 @@ function App() {
     try{
       const response=await fetch(`${process.env.REACT_APP_API_URL}/completions`,options)
       const data=await response.json()
-      console.log(data)
+      console.log("Groq response:", JSON.stringify(data));
+    
+      if (!response.ok) {
+          return res.status(response.status).json({ error: data });
+      }
       setMessage(data.choices[0].message)
     }catch(error){
       console.log(error)
