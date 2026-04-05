@@ -38,7 +38,7 @@ function App() {
       console.log("Groq response:", JSON.stringify(data));
     
       if (!response.ok) {
-          return res.status(response.status).json({ error: data });
+         console.log(data.error || "Unknown error occurred");
       }
       setMessage(data.choices[0].message)
     }catch(error){
