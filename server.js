@@ -6,7 +6,9 @@ const app=express();
 require('dotenv').config();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin:"https://chatgpt-clone-1-bmaw.onrender.com"
+}));
 
 const API_KEY = process.env.API_KEY;
 
