@@ -23,7 +23,8 @@ app.post('/completions',async(req,res)=>{
         body:JSON.stringify({
             model:"openai/gpt-oss-120b",
             messages:[{role:"user",content:req.body.message}],
-            max_tokens:100,
+            max_completion_tokens:2048,  
+            reasoning_effort:"low", 
         })
     }
     try{
