@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react"
+import { useState, useEffect } from "react"
 
 
 function App() {
@@ -7,6 +7,11 @@ function App() {
   const [message,setMessage]=useState(null);
   const [prevChats,setPrevChats]=useState([]);
   const [currentTitle,setCurrentTitle]=useState(null);
+
+  // Messages that belong to the chat that is currently open
+  const currentChat=prevChats.filter(prevChat => prevChat.title === currentTitle )
+
+  const uniqueTitles=Array.from(new Set(prevChats.map(prevChat =>prevChat.title)))
 
   const createNewChat=()=>{
     setMessage(null)
@@ -22,10 +27,16 @@ function App() {
 
   const getMessages=async()=>{
 
+    if(!value.trim()) return;
+
+    // MEMORY: send the earlier messages of this chat plus the new user message
+    const history = currentChat.map(({role, content}) => ({role, content}));
+    const messagesToSend = [...history, { role:"user", content:value }];
+
     const options={
       method:"POST",
       body:JSON.stringify({
-          message:value
+          messages: messagesToSend
       }),
       headers:{
         "Content-Type":"application/json"
@@ -35,18 +46,17 @@ function App() {
     try{
       const response=await fetch(`${process.env.REACT_APP_API_URL}/completions`,options)
       const data=await response.json()
-      console.log("Groq response:", JSON.stringify(data));
-    
+
       if (!response.ok) {
          console.log(data.error || "Unknown error occurred");
+         return;
       }
       setMessage(data.choices[0].message)
     }catch(error){
       console.log(error)
     }
-
-    // setMessage("")
   }
+
   useEffect(()=>{
     if(!currentTitle && value && message){
       setCurrentTitle(value)
@@ -55,13 +65,11 @@ function App() {
       setPrevChats(prevChats =>(
         [
           ...prevChats,{
-            //when we open prevchat , we're assinging title,role and content from prev
             title:currentTitle,
             role:"user",
             content:value
           },
           {
-            //for response from Ai which is sent for other object 
             title:currentTitle,
             role:message.role,
             content:message.content
@@ -72,12 +80,6 @@ function App() {
     }
   },[message,currentTitle])
 
-  const currentChat=prevChats.filter(prevChat => prevChat.title === currentTitle )
-
-  const uniqueTitles=Array.from(new Set(prevChats.map(prevChat =>prevChat.title)))
-
-
-  console.log(currentChat)
   return (
     <div className="app">
       <section className="side-bar">
