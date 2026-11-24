@@ -27,7 +27,7 @@ app.post('/completions', async (req, res) => {
         .filter(m => (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
         .map(m => ({ role: m.role, content: m.content }))
         .slice(-MAX_HISTORY);
-        
+
 
     const options = {
         method: "POST",
@@ -36,7 +36,7 @@ app.post('/completions', async (req, res) => {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
+            model: "openai/gpt-oss-120b",
             messages: [
                 { role: "system", content: "You are a helpful assistant." },
                 ...history
