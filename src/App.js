@@ -8,7 +8,7 @@ function App() {
   const [prevChats,setPrevChats]=useState([]);
   const [currentTitle,setCurrentTitle]=useState(null);
 
-  // Messages that belong to the chat that is currently open
+  // Messages that belong to the chat that is currently open 
   const currentChat=prevChats.filter(prevChat => prevChat.title === currentTitle )
 
   const uniqueTitles=Array.from(new Set(prevChats.map(prevChat =>prevChat.title)))

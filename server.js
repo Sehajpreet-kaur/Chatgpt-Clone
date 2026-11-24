@@ -27,6 +27,7 @@ app.post('/completions', async (req, res) => {
         .filter(m => (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
         .map(m => ({ role: m.role, content: m.content }))
         .slice(-MAX_HISTORY);
+        
 
     const options = {
         method: "POST",
